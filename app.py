@@ -1,14 +1,42 @@
 import streamlit as st
+import hashlib
 import requests
 import json
 from datetime import datetime
 
-# Configure page
+# Configure page FIRST - Must be before any other st commands
 st.set_page_config(
     page_title="Gmail Assistant",
     page_icon="📧",
     layout="centered"
 )
+
+# === PASSWORD AUTHENTICATION ===
+def check_password():
+    """Returns `True` if user has correct password."""
+    def password_entered():
+        """Checks whether password entered is correct."""
+        entered_password = st.session_state["password"]
+        password_hash = hashlib.sha256(entered_password.encode()).hexdigest()
+        # Password: Myworlds123321
+        correct_hash = "3aca9537d55cfd69afb80fb3d541799abfc17dffccb64cbbd04b6b0bad322ca1"
+        
+        if password_hash == correct_hash:
+            st.session_state["password_correct"] = True
+            del st.session_state["password"]
+        else:
+            st.session_state["password_correct"] = False
+
+    if "password_correct" not in st.session_state:
+        st.text_input("🔐 Enter Password", type="password", on_change=password_entered, key="password")
+        st.stop()
+    elif not st.session_state["password_correct"]:
+        st.text_input("🔐 Enter Password", type="password", on_change=password_entered, key="password")
+        st.error("😕 Password incorrect")
+        st.stop()
+
+check_password()
+# === END AUTHENTICATION ===
 
 # MCP Server URL
 MCP_URL = "https://hstest-agent-tool-68934942232.us-central1.run.app/mcp"
