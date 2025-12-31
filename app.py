@@ -4,15 +4,20 @@ import requests
 import json
 from datetime import datetime
 
+# Configure page FIRST - BEFORE any other st commands
+st.set_page_config(
+    page_title="Gmail Assistant",
+    page_icon="📧",
+    layout="centered"
+)
+
 # === AUTHENTICATION CODE ===
 def check_password():
     """Returns `True` if user has correct password."""
     def password_entered():
         """Checks whether password entered is correct."""
         entered_password = st.session_state["password"]
-        # Hash the password for security
         password_hash = hashlib.sha256(entered_password.encode()).hexdigest()
-        # Password hash for: Myworlds123321
         correct_hash = "3aca9537d55cfd69afb80fb3d541799abfc17dffccb64cbbd04b6b0bad322ca1"
         
         if password_hash == correct_hash:
@@ -21,19 +26,19 @@ def check_password():
         else:
             st.session_state["password_correct"] = False
 
-    # First run, show password input
     if "password_correct" not in st.session_state:
         st.text_input("🔐 Enter Password", type="password", on_change=password_entered, key="password")
         st.stop()
-    # Password incorrect, show input + error
     elif not st.session_state["password_correct"]:
         st.text_input("🔐 Enter Password", type="password", on_change=password_entered, key="password")
         st.error("😕 Password incorrect")
         st.stop()
-    # Password correct, continue
 
 check_password()
 # === END AUTHENTICATION CODE ===
+
+# Rest of your code stays the same...
+
 
 # Configure page (this must come AFTER authentication but BEFORE any other st commands)
 st.set_page_config(
@@ -162,3 +167,4 @@ with st.sidebar:
     if st.button("Clear Chat"):
         st.session_state.messages = []
         st.rerun()
+
