@@ -13,7 +13,7 @@ def check_password():
         # Hash the password for security
         password_hash = hashlib.sha256(entered_password.encode()).hexdigest()
         # Change this hash to your password's hash
-        correct_hash = "5c84822c7715c0be10ec93579c881b4f8f0e02c89c23f6a820d913adb1e80e19"
+        correct_hash = "3aca9537d55cfd69afb80fb3d541799abfc17dffccb64cbbd04b6b0bad322ca1"
         
         if password_hash == correct_hash:
             st.session_state["password_correct"] = True
@@ -42,5 +42,6 @@ st.set_page_config(
 )
 
 # Rest of your code...
+
 
 
